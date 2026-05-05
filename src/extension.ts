@@ -59,12 +59,33 @@ export function activate(context: vscode.ExtensionContext) {
   // Stash the activation context for deactivate() — VS Code doesn't pass it.
   deactivateCtx = context;
 
-  // Run after a short delay so the prompt doesn't appear during VS Code startup.
+  // If the user previously chose "Set as Default" but our deactivate hook
+  // (last shutdown) cleared the association, silently re-apply it now.
+  // No prompt needed — they already opted in.
   setTimeout(() => {
+    reapplyDefaultIfPreviouslyOptedIn(context).catch(() => {});
     maybePromptForDefaultEditor(context).catch((err) =>
       console.warn('[markdownJet] default-editor prompt failed', err)
     );
   }, 1500);
+}
+
+async function reapplyDefaultIfPreviouslyOptedIn(context: vscode.ExtensionContext): Promise<void> {
+  const hasSnapshot = context.globalState.get(PREV_ASSOC_KEY);
+  if (!hasSnapshot) return; // user never opted in
+  const cfg = vscode.workspace.getConfiguration('workbench');
+  const assoc = cfg.get<Record<string, string>>('editorAssociations') ?? {};
+  if (assoc['*.md'] === MarkdownEditorProvider.viewType) return; // already set
+  // Re-apply silently
+  await cfg.update(
+    'editorAssociations',
+    {
+      ...assoc,
+      '*.md': MarkdownEditorProvider.viewType,
+      '*.markdown': MarkdownEditorProvider.viewType
+    },
+    vscode.ConfigurationTarget.Global
+  );
 }
 
 let deactivateCtx: vscode.ExtensionContext | undefined;
