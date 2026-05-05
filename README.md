@@ -1,198 +1,222 @@
 # MarkdownJet
 
-> 单 tab、多模式的 VS Code Markdown 编辑器,内嵌 CodeMirror + Mermaid + KaTeX + 语法高亮 + 实时预览。
+> JetBrains-style single-tab Markdown editor for VS Code — CodeMirror 6 + Mermaid + KaTeX + GitHub-flavored preview, with bidirectional scroll sync.
 
 ![mode buttons in tab bar](docs/screenshots/buttons.png)
 
-## ✨ 特性
+## ✨ Features
 
-| 模块 | 说明 |
+| Module | What it does |
 | --- | --- |
-| **三模式 tab 内切换** | 编辑器右上角 3 个按钮:`编辑` / `双栏` / `预览`,**始终单 tab**,模式只改 webview 内部布局 |
-| **窗口级模式共享** | 在一个 md 上切换模式,同窗口其它 md 自动同步;新窗口默认编辑模式 |
-| **CodeMirror 6 编辑器** | 行号、Markdown 语法高亮、查找替换 (`Cmd+F`)、多光标 (`Alt+Click`)、Tab 缩进、Cmd+Z/Y |
-| **GitHub 风格预览** | markdown-it 渲染,代码块走 highlight.js (github / github-dark) |
-| **Mermaid 图表** | 流程/时序/类/状态/饼/甘特图等 14+ 类型,本地打包不走 CDN |
-| **KaTeX 数学公式** | 行内 `$...$` + 块级 `$$...$$`,本地字体 |
-| **大纲 → 跳转** | 资源管理器侧边栏「Markdown 大纲」TreeView,点击跳到对应行,编辑+预览同步定位 |
-| **双栏滚动联动** | 双栏模式下,编辑滚动 ↔ 预览滚动 实时同步 |
-| **主题跟随 VS Code** | 编辑/预览/按钮全部 `--vscode-*` 变量 + `body.vscode-light/dark` 选择器 |
-| **图片支持** | 远程 URL、相对路径(自动用 `webview.asWebviewUri` 解析) |
-| **基础 Lint** | MD009/MD012/MD018/MD001/MD034 等规则,诊断进 Problems 面板 |
-| **快捷键** | `Cmd+1/2/3` 切模式;`Cmd+Alt+T/L/I` 插入表格/链接/图片;`Shift+Alt+F` 格式化 |
+| **In-tab three-mode switcher** | Three icons in the tab title bar — `Edit` / `Both` / `Preview`. The file always lives in **a single tab**; switching modes only re-arranges the panes inside the webview. |
+| **Window-level shared mode** | Switch the mode on one `.md` file and every open `.md` in the same VS Code window follows. New windows start in `Edit` mode. |
+| **CodeMirror 6 editor** | Line numbers, Markdown syntax highlighting, find/replace (`Cmd+F`), multi-cursor (`Alt+Click`), bracket matching, Tab indent, full undo/redo. |
+| **GitHub-flavored preview** | `markdown-it` rendering; fenced code blocks highlighted by **highlight.js** (`github` / `github-dark` themes auto-switching). |
+| **Mermaid diagrams** | Flowchart, sequence, class, state, pie, gantt, ER, …14+ types. Bundled locally — no CDN, fast first paint. |
+| **KaTeX math** | Inline `$...$` and block `$$...$$`. Local fonts, no CDN. |
+| **Outline → reveal** | "Markdown Outline" tree view in the Explorer. Click a heading: editor caret jumps to the line, preview scrolls to the rendered position. |
+| **Bidirectional scroll sync** | In `Both` mode, scrolling either pane scrolls the other in lockstep. |
+| **Native theme integration** | Editor / preview / tab-bar buttons all use VS Code CSS variables and respond to live theme changes. |
+| **Image rendering** | Remote URLs and workspace-relative paths (auto-resolved via `webview.asWebviewUri`). |
+| **Built-in lint** | MD001 / MD009 / MD012 / MD018 / MD034 → reported in the Problems panel. |
+| **Keybindings** | `Cmd+1/2/3` to switch modes; `Cmd+Alt+T/L/I` to insert table/link/image; `Shift+Alt+F` to format. |
 
-## 🚀 快速开始
+## 🚀 Quick start
 
-### 用户端
+### As a user
 
-直接安装(打包好后)`.vsix` 即可。.md 文件会**默认**用 MarkdownJet 打开。
+Install **MarkdownJet** from the Marketplace.
 
-如果某个文件想用原生编辑器:右键 → **Reopen Editor With** → **Text Editor**。
+The first time the extension activates, it offers to set itself as the
+default `*.md` editor. Click **Set as Default** and you're done — every
+markdown file opens in MarkdownJet from then on.
 
-### 开发端
+If you ever want to use VS Code's native text editor for a specific file:
+right-click the tab → **Reopen Editor With** → **Text Editor**.
+
+### As a contributor
 
 ```bash
-git clone https://github.com/kakunasa/vscode-markdown-pro.git
-cd vscode-markdown-pro
+git clone https://github.com/kakunasa/markdownjet.git
+cd markdownjet
 npm install
-npm run compile           # 一次性构建
-# 或
-npm run watch             # 后台增量构建,改代码自动重打包
+npm run compile        # one-shot build
+# or
+npm run watch          # incremental rebuild on file changes
 
-# 在 VS Code 里打开本目录,F5 启动 Extension Development Host
-# 在弹出的新窗口里 File → Open Folder → 选 test-fixtures
-# 双击任意 .md 文件
+# Open the folder in VS Code, then F5 to launch the Extension Development Host.
+# In the new window: File → Open Folder → select test-fixtures
+# Double-click any .md file to try it out.
 ```
 
-打包成可发布的 `.vsix`:
+To produce a publishable `.vsix`:
 
 ```bash
 npx vsce package
 ```
 
-## 🎮 使用
+## 🎮 Usage
 
-### 三模式按钮
+### Three-mode buttons
 
-打开任意 `.md` 文件,**编辑器 tab 栏右侧**有 3 个图标按钮(随主题变深/浅):
+Open any `.md` file. The **right side of the tab title bar** shows three
+monochrome icons that adapt to your VS Code theme:
 
-| 图标 | 模式 | 内容 |
+| Icon | Mode | Layout |
 | --- | --- | --- |
-| 窗口 + `<>` | 编辑 | 仅 CodeMirror 编辑区,占满 tab |
-| 窗口 + 顶线 + `<>` | 双栏 | 左编辑 + 右预览,各占一半,**滚动同步** |
-| 窗口 + 顶线(下方填实) | 预览 | 仅渲染后的 HTML 预览,占满 tab |
+| Window + `<>` | **Edit** | CodeMirror full-width |
+| Window + top bar + `<>` | **Both** | CodeMirror left, preview right, scroll-synced |
+| Window + top bar (filled) | **Preview** | Rendered HTML full-width |
 
-active 模式的按钮会**填实**,inactive 仅外框,不靠粗细/颜色对比。
+The active mode's icon is **filled solid**; inactive icons are outline-only.
+No background chips, no thickness contrast — just shape.
 
-### 大纲
+### Outline
 
-左侧资源管理器底部出现 **「Markdown 大纲」** 面板。点任一标题:
-- 编辑器光标跳到该行
-- 预览滚动到对应渲染位置
+The Explorer side bar shows a **Markdown Outline** view. Click any heading:
+- Caret moves to that line in the editor
+- Preview scrolls to the corresponding rendered element
 
-### 快捷键
+### Keybindings
 
-| 操作 | macOS | Windows / Linux |
+| Action | macOS | Windows / Linux |
 | --- | --- | --- |
-| 编辑模式 | `Cmd+1` | `Ctrl+1` |
-| 双栏模式 | `Cmd+2` | `Ctrl+2` |
-| 预览模式 | `Cmd+3` | `Ctrl+3` |
-| 保存 | `Cmd+S` | `Ctrl+S` |
-| 查找 | `Cmd+F` | `Ctrl+F` |
-| 多光标点击 | `Alt+Click` | `Alt+Click` |
-| 插入表格 | `Cmd+Alt+T` | `Ctrl+Alt+T` |
-| 插入链接 | `Cmd+Alt+L` | `Ctrl+Alt+L` |
-| 插入图片 | `Cmd+Alt+I` | `Ctrl+Alt+I` |
-| 格式化 | `Shift+Alt+F` | `Shift+Alt+F` |
+| Edit mode | `Cmd+1` | `Ctrl+1` |
+| Both mode | `Cmd+2` | `Ctrl+2` |
+| Preview mode | `Cmd+3` | `Ctrl+3` |
+| Save | `Cmd+S` | `Ctrl+S` |
+| Find | `Cmd+F` | `Ctrl+F` |
+| Multi-cursor add | `Alt+Click` | `Alt+Click` |
+| Insert table | `Cmd+Alt+T` | `Ctrl+Alt+T` |
+| Insert link | `Cmd+Alt+L` | `Ctrl+Alt+L` |
+| Insert image | `Cmd+Alt+I` | `Ctrl+Alt+I` |
+| Format document | `Shift+Alt+F` | `Shift+Alt+F` |
 
-## 🧱 架构
+## 🧱 Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  VS Code Extension Host                                      │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │  CustomTextEditorProvider (markdownJet.editor)          │ │
-│  │  - 1 webview / 1 tab,绑定 TextDocument                  │ │
-│  │  - postMessage 双向通信                                 │ │
-│  │  - 防抖 250ms 写回 TextDocument(保 undo 历史)         │ │
+│  │  CustomTextEditorProvider (markdownJet.editor)         │ │
+│  │  - 1 webview per file = 1 tab, bound to TextDocument   │ │
+│  │  - postMessage in both directions                       │ │
+│  │  - Debounced 250 ms write-back to TextDocument          │ │
+│  │    (keeps undo history clean)                           │ │
 │  └────────────────────────────────────────────────────────┘ │
 │        │ postMessage                                         │
 │        ▼                                                     │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │  Webview (dist/webview.js,iife bundle)                  │ │
+│  │  Webview  (dist/webview.js, IIFE bundle)                │ │
 │  │  ┌──────────────────────┬──────────────────────────────┐│ │
 │  │  │  CodeMirror 6        │  <article id="preview">      ││ │
-│  │  │  - markdown lang     │  - markdown-it 渲染 HTML     ││ │
-│  │  │  - 行号 / 语法高亮   │  - Mermaid (本地 mermaid.min)││ │
-│  │  │  - 查找 / 多光标     │  - KaTeX (本地)               ││ │
-│  │  │  - 滚动监听          │  - highlight.js github 主题  ││ │
+│  │  │  - markdown lang     │  - markdown-it → HTML        ││ │
+│  │  │  - line numbers      │  - Mermaid (local bundle)    ││ │
+│  │  │  - find / multi-cur  │  - KaTeX  (local bundle)     ││ │
+│  │  │  - scroll listener   │  - highlight.js github theme ││ │
 │  │  └──────────────────────┴──────────────────────────────┘│ │
 │  └────────────────────────────────────────────────────────┘ │
 │                                                              │
-│  独立模块:                                                   │
-│  - OutlineProvider:解析标题层级 → TreeView                  │
-│  - MarkdownLinter:DiagnosticCollection,5 类规则             │
-│  - editCommands:插入表格/链接/图片(走 replaceSelection)   │
+│  Independent modules:                                        │
+│  - OutlineProvider  → tree view of headings                  │
+│  - MarkdownLinter   → diagnostics, 5 rules                   │
+│  - editCommands     → table/link/image inserters             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 主要文件
+### Source layout
 
 ```
 src/
-├── extension.ts                 # 入口,注册 customEditor + 各命令
+├── extension.ts                 # entry point — registers customEditor + commands
 ├── editor/
-│   └── markdownEditor.ts        # CustomTextEditorProvider 实现
+│   └── markdownEditor.ts        # CustomTextEditorProvider implementation
 ├── webview/
-│   └── editor.ts                # Webview 端:CodeMirror + 滚动联动 + Mermaid/KaTeX 调度
+│   └── editor.ts                # webview side — CodeMirror, scroll sync, render dispatch
 ├── preview/
-│   └── renderer.ts              # markdown-it + highlight.js + 数据源行注入
+│   └── renderer.ts              # markdown-it + highlight.js + source-line injection
 ├── outline/
-│   └── outlineProvider.ts       # TreeDataProvider,TreeView 大纲
+│   └── outlineProvider.ts       # TreeDataProvider for the outline view
 ├── lint/
-│   └── linter.ts                # MarkdownLinter,5 类规则
+│   └── linter.ts                # MarkdownLinter (5 rules)
 └── edit/
-    └── editCommands.ts          # 插入表格/链接/图片/格式化
+    └── editCommands.ts          # insert table / link / image / format
 
 media/
-├── *-{active,inactive}-{light,dark}.svg  # 12 个 tab-bar 模式按钮
-└── vendor/
-    ├── mermaid.min.js           # 离线 Mermaid 10.x
+├── *-{active,inactive}-{light,dark}.svg   # 12 tab-bar mode-button icons
+├── icon.{svg,png}               # 128x128 Marketplace icon
+└── vendor/                       # generated at build time, not committed
+    ├── mermaid.min.js           # Mermaid 10.x (offline)
     ├── katex.min.{js,css} + fonts/
     ├── katex-auto-render.min.js
-    └── highlight.css            # github + github-dark 合并 + 主题作用域
+    └── highlight.css            # github + github-dark, scoped by body class
 
 dist/
-├── extension.js                 # esbuild 打包的扩展端 (Node)
-└── webview.js                   # esbuild 打包的 webview 端 (browser/iife)
+├── extension.js                 # esbuild output (Node, CJS)
+└── webview.js                   # esbuild output (browser, IIFE)
 ```
 
-### 双 Bundle 设计
+### Dual-bundle build
 
-`esbuild.js` 配置了**两个 entryPoint**:
+`esbuild.js` declares **two entry points**:
 
-- `src/extension.ts` → `dist/extension.js`(`platform: node`,`format: cjs`)
-- `src/webview/editor.ts` → `dist/webview.js`(`platform: browser`,`format: iife`)
+- `src/extension.ts` → `dist/extension.js` (`platform: node`, `format: cjs`)
+- `src/webview/editor.ts` → `dist/webview.js` (`platform: browser`, `format: iife`)
 
-webview 包含 CodeMirror + 启动逻辑 ≈ 1.3 MB(unminified)。Mermaid/KaTeX 不走 webpack/bundle,而是 esbuild 启动时**复制**到 `media/vendor/`,webview 直接 `<script src="${webview.asWebviewUri(...)}">` 引用。
+The webview bundle includes CodeMirror 6 and the boot logic (~1.3 MB unminified).
+Mermaid and KaTeX are *not* webpacked — they're copied from `node_modules/`
+to `media/vendor/` at build time and loaded by the webview via
+`<script src="${webview.asWebviewUri(…)}">`.
 
-### 滚动联动算法
+### Scroll sync algorithm
 
-1. 渲染时,markdown-it core ruler 给每个块级 token 加 `data-source-line` 属性
-2. webview JS 监听 `view.scrollDOM` 和 `.preview-pane` 的 scroll 事件
-3. 编辑器滚 → 取顶部行号 → 在预览里找前后两个 `[data-source-line]` 元素 → 线性插值算预览滚动目标
-4. 预览滚 → 取顶部第一个 `[data-source-line]` 元素的行号 → CodeMirror `scrollIntoView`
-5. `suppressScrollSync` flag + 双 RAF 释放,避免回环
+1. During render, a `markdown-it` core ruler tags every block-level token
+   with `data-source-line="<n>"`.
+2. The webview listens to `scroll` events on both `view.scrollDOM`
+   (CodeMirror) and `.preview-pane`.
+3. Editor → preview: take the source line at the editor's top, find the
+   bracketing `[data-source-line]` elements in the preview, linearly
+   interpolate the target `scrollTop`.
+4. Preview → editor: take the source line of the topmost visible preview
+   element, dispatch `EditorView.scrollIntoView`.
+5. A `suppressScrollSync` flag plus a double-`requestAnimationFrame`
+   release prevents the two listeners from echoing each other.
 
-## ⚙️ 配置
+## ⚙️ Configuration
 
-`Cmd+,` 搜 `markdownJet`:
+`Cmd+,` then search for `markdownJet`:
 
-| 配置项 | 默认 | 说明 |
+| Setting | Default | Description |
 | --- | --- | --- |
-| `markdownJet.preview.theme` | `light` | 预览主题:`light` / `dark` / `github` / `solarized`(已基本被 VS Code 主题接管,保留兼容) |
-| `markdownJet.preview.enableMermaid` | `true` | 是否启用 Mermaid 图表 |
-| `markdownJet.preview.enableMath` | `true` | 是否启用 KaTeX |
-| `markdownJet.lint.enable` | `true` | 是否启用 Lint 实时校验 |
+| `markdownJet.preview.theme` | `light` | Preview theme (legacy — VS Code theme is now the source of truth). |
+| `markdownJet.preview.enableMermaid` | `true` | Render fenced ` ```mermaid ` blocks as diagrams. |
+| `markdownJet.preview.enableMath` | `true` | Render `$...$` / `$$...$$` with KaTeX. |
+| `markdownJet.lint.enable` | `true` | Run live lint and report to Problems. |
 
-## 🐞 已知限制
+## 🐞 Known limitations
 
-- **Lint 警告**只显示在 Problems 面板,不在 CodeMirror 编辑区显示下划线(`@codemirror/lint` 集成是后续 TODO)
-- **预览**目前不支持图片拖拽(命令 `MarkdownJet: 插入图片` 选「URL」/「本地文件」替代)
-- 切回 VS Code 原生编辑器:右键 .md 文件 → **Reopen Editor With** → **Text Editor** 或者命令面板搜 `MarkdownJet: 用纯文本编辑器打开`
-- 已渲染的 Mermaid 图在主题切换后**保留旧色**,需要触发一次内容更新才会重渲染
+- **Lint diagnostics** are reported in the Problems panel; they do **not**
+  show as squiggles inside the CodeMirror editor yet
+  (`@codemirror/lint` integration is on the TODO list).
+- **Drag-and-drop image upload** is not implemented; use the command
+  `MarkdownJet: Insert Image` (`Cmd+Alt+I`) to insert a path or URL.
+- Already-rendered Mermaid diagrams **keep their old theme** after a
+  VS Code theme switch until you trigger a content change to re-render.
+- To use VS Code's native text editor for a specific markdown file:
+  right-click the file → **Reopen Editor With** → **Text Editor**, or
+  run `MarkdownJet: Open in Plain Text Editor`.
 
-## 📦 依赖体积
+## 📦 Bundle size
 
-| | unminified |
+| File | Unminified |
 | --- | --- |
-| `dist/extension.js` | ~660 KB(含 markdown-it + highlight.js) |
-| `dist/webview.js` | ~1.3 MB(CodeMirror 全套) |
+| `dist/extension.js` | ~660 KB (markdown-it + highlight.js inlined) |
+| `dist/webview.js` | ~1.3 MB (CodeMirror 6 full set) |
 | `media/vendor/mermaid.min.js` | ~3.3 MB |
 | `media/vendor/katex/*` | ~600 KB |
 
-最终 `.vsix` ≈ 5 MB。生产构建 `npm run package` 会 minify。
+The published `.vsix` is ~2.2 MB (production minify enabled by `npm run package`).
 
 ## 📝 License
 

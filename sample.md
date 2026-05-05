@@ -139,7 +139,7 @@ done
 
 ```json
 {
-  "name": "vscode-markdown-pro",
+  "name": "markdownjet",
   "displayName": "MarkdownJet",
   "version": "0.0.1",
   "engines": { "vscode": "^1.85.0" },

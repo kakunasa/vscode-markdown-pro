@@ -13,7 +13,7 @@ export class OutlineItem extends vscode.TreeItem {
     this.iconPath = new vscode.ThemeIcon('symbol-namespace');
     this.command = {
       command: 'markdownJet.revealLine',
-      title: '跳转到标题',
+      title: 'Reveal heading',
       arguments: [resource, line]
     };
     this.tooltip = `H${level}  Line ${line + 1}`;

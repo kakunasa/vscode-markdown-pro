@@ -6,13 +6,13 @@
   "publisher": "kakunasa",
   "license": "MIT",
   "icon": "media/icon.png",
-  "homepage": "https://github.com/kakunasa/vscode-markdown-pro#readme",
+  "homepage": "https://github.com/kakunasa/markdownjet#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kakunasa/vscode-markdown-pro.git"
+    "url": "https://github.com/kakunasa/markdownjet.git"
   },
   "bugs": {
-    "url": "https://github.com/kakunasa/vscode-markdown-pro/issues"
+    "url": "https://github.com/kakunasa/markdownjet/issues"
   },
   "qna": "marketplace",
   "keywords": [
@@ -44,37 +44,37 @@
     ],
     "commands": [
       {
-        "command": "markdownJet.viewMode.editOnly", "title": "MarkdownJet: 编辑模式",
+        "command": "markdownJet.viewMode.editOnly", "title": "MarkdownJet: Edit Mode",
         "icon": { "light": "media/edit-inactive-light.svg", "dark": "media/edit-inactive-dark.svg" }
       },
       {
-        "command": "markdownJet.viewMode.editOnly.active", "title": "MarkdownJet: 编辑模式 (当前)",
+        "command": "markdownJet.viewMode.editOnly.active", "title": "MarkdownJet: Edit Mode (current)",
         "icon": { "light": "media/edit-active-light.svg", "dark": "media/edit-active-dark.svg" }
       },
       {
-        "command": "markdownJet.viewMode.both", "title": "MarkdownJet: 双栏模式",
+        "command": "markdownJet.viewMode.both", "title": "MarkdownJet: Edit + Preview (Both)",
         "icon": { "light": "media/both-inactive-light.svg", "dark": "media/both-inactive-dark.svg" }
       },
       {
-        "command": "markdownJet.viewMode.both.active", "title": "MarkdownJet: 双栏模式 (当前)",
+        "command": "markdownJet.viewMode.both.active", "title": "MarkdownJet: Edit + Preview (current)",
         "icon": { "light": "media/both-active-light.svg", "dark": "media/both-active-dark.svg" }
       },
       {
-        "command": "markdownJet.viewMode.previewOnly", "title": "MarkdownJet: 预览模式",
+        "command": "markdownJet.viewMode.previewOnly", "title": "MarkdownJet: Preview Mode",
         "icon": { "light": "media/preview-inactive-light.svg", "dark": "media/preview-inactive-dark.svg" }
       },
       {
-        "command": "markdownJet.viewMode.previewOnly.active", "title": "MarkdownJet: 预览模式 (当前)",
+        "command": "markdownJet.viewMode.previewOnly.active", "title": "MarkdownJet: Preview Mode (current)",
         "icon": { "light": "media/preview-active-light.svg", "dark": "media/preview-active-dark.svg" }
       },
-      { "command": "markdownJet.insertTable",     "title": "MarkdownJet: 插入表格" },
-      { "command": "markdownJet.insertLink",      "title": "MarkdownJet: 插入链接" },
-      { "command": "markdownJet.insertImage",     "title": "MarkdownJet: 插入图片" },
-      { "command": "markdownJet.format",          "title": "MarkdownJet: 格式化文档" },
-      { "command": "markdownJet.lint.run",         "title": "MarkdownJet: 运行 Lint" },
-      { "command": "markdownJet.openInTextEditor", "title": "MarkdownJet: 用纯文本编辑器打开" },
-      { "command": "markdownJet.setAsDefault",     "title": "MarkdownJet: 设为 Markdown 默认编辑器" },
-      { "command": "markdownJet.resetDefaultPrompt", "title": "MarkdownJet: 重新启用「设为默认」首次提示" }
+      { "command": "markdownJet.insertTable",        "title": "MarkdownJet: Insert Table" },
+      { "command": "markdownJet.insertLink",         "title": "MarkdownJet: Insert Link" },
+      { "command": "markdownJet.insertImage",        "title": "MarkdownJet: Insert Image" },
+      { "command": "markdownJet.format",             "title": "MarkdownJet: Format Document" },
+      { "command": "markdownJet.lint.run",           "title": "MarkdownJet: Run Lint" },
+      { "command": "markdownJet.openInTextEditor",   "title": "MarkdownJet: Open in Plain Text Editor" },
+      { "command": "markdownJet.setAsDefault",       "title": "MarkdownJet: Set as Default Markdown Editor" },
+      { "command": "markdownJet.resetDefaultPrompt", "title": "MarkdownJet: Re-enable First-Run Prompt" }
     ],
     "menus": {
       "commandPalette": [
@@ -137,7 +137,7 @@
     ],
     "views": {
       "explorer": [
-        { "id": "markdownJetOutline", "name": "Markdown 大纲" }
+        { "id": "markdownJetOutline", "name": "Markdown Outline" }
       ]
     },
     "configuration": {
@@ -147,16 +147,19 @@
           "type": "string",
           "enum": ["light", "dark", "github", "solarized"],
           "default": "light",
-          "description": "预览主题"
+          "description": "Preview color theme (legacy — VS Code theme is the source of truth)."
         },
         "markdownJet.preview.enableMermaid": {
-          "type": "boolean", "default": true, "description": "启用 Mermaid 图表渲染"
+          "type": "boolean", "default": true,
+          "description": "Render fenced ```mermaid blocks as diagrams."
         },
         "markdownJet.preview.enableMath": {
-          "type": "boolean", "default": true, "description": "启用 KaTeX 数学公式"
+          "type": "boolean", "default": true,
+          "description": "Render $...$ and $$...$$ math with KaTeX."
         },
         "markdownJet.lint.enable": {
-          "type": "boolean", "default": true, "description": "启用 Lint 校验"
+          "type": "boolean", "default": true,
+          "description": "Run live Markdown lint and report to the Problems panel."
         }
       }
     }
