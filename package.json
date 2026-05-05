@@ -2,7 +2,7 @@
   "name": "markdownjet",
   "displayName": "MarkdownJet",
   "description": "JetBrains-style single-tab Markdown editor for VS Code: CodeMirror 6 + Mermaid + KaTeX + syntax highlighting + bidirectional scroll sync.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "kakunasa",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -16,9 +16,16 @@
   },
   "qna": "marketplace",
   "keywords": [
-    "markdown", "preview", "mermaid", "katex", "outline",
-    "syntax-highlighting", "single-tab", "scroll-sync",
-    "codemirror", "github-style"
+    "markdown",
+    "preview",
+    "mermaid",
+    "katex",
+    "outline",
+    "syntax-highlighting",
+    "single-tab",
+    "scroll-sync",
+    "codemirror",
+    "github-style"
   ],
   "galleryBanner": {
     "color": "#4f46e5",
@@ -27,7 +34,12 @@
   "engines": {
     "vscode": "^1.85.0"
   },
-  "categories": ["Programming Languages", "Linters", "Formatters", "Other"],
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Formatters",
+    "Other"
+  ],
   "activationEvents": [
     "onLanguage:markdown",
     "onCustomEditor:markdownJet.editor"
@@ -38,49 +50,113 @@
       {
         "viewType": "markdownJet.editor",
         "displayName": "MarkdownJet",
-        "selector": [{ "filenamePattern": "*.md" }, { "filenamePattern": "*.markdown" }],
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          },
+          {
+            "filenamePattern": "*.markdown"
+          }
+        ],
         "priority": "default"
       }
     ],
     "commands": [
       {
-        "command": "markdownJet.viewMode.editOnly", "title": "MarkdownJet: Edit Mode",
-        "icon": { "light": "media/edit-inactive-light.svg", "dark": "media/edit-inactive-dark.svg" }
+        "command": "markdownJet.viewMode.editOnly",
+        "title": "MarkdownJet: Edit Mode",
+        "icon": {
+          "light": "media/edit-inactive-light.svg",
+          "dark": "media/edit-inactive-dark.svg"
+        }
       },
       {
-        "command": "markdownJet.viewMode.editOnly.active", "title": "MarkdownJet: Edit Mode (current)",
-        "icon": { "light": "media/edit-active-light.svg", "dark": "media/edit-active-dark.svg" }
+        "command": "markdownJet.viewMode.editOnly.active",
+        "title": "MarkdownJet: Edit Mode (current)",
+        "icon": {
+          "light": "media/edit-active-light.svg",
+          "dark": "media/edit-active-dark.svg"
+        }
       },
       {
-        "command": "markdownJet.viewMode.both", "title": "MarkdownJet: Edit + Preview (Both)",
-        "icon": { "light": "media/both-inactive-light.svg", "dark": "media/both-inactive-dark.svg" }
+        "command": "markdownJet.viewMode.both",
+        "title": "MarkdownJet: Edit + Preview (Both)",
+        "icon": {
+          "light": "media/both-inactive-light.svg",
+          "dark": "media/both-inactive-dark.svg"
+        }
       },
       {
-        "command": "markdownJet.viewMode.both.active", "title": "MarkdownJet: Edit + Preview (current)",
-        "icon": { "light": "media/both-active-light.svg", "dark": "media/both-active-dark.svg" }
+        "command": "markdownJet.viewMode.both.active",
+        "title": "MarkdownJet: Edit + Preview (current)",
+        "icon": {
+          "light": "media/both-active-light.svg",
+          "dark": "media/both-active-dark.svg"
+        }
       },
       {
-        "command": "markdownJet.viewMode.previewOnly", "title": "MarkdownJet: Preview Mode",
-        "icon": { "light": "media/preview-inactive-light.svg", "dark": "media/preview-inactive-dark.svg" }
+        "command": "markdownJet.viewMode.previewOnly",
+        "title": "MarkdownJet: Preview Mode",
+        "icon": {
+          "light": "media/preview-inactive-light.svg",
+          "dark": "media/preview-inactive-dark.svg"
+        }
       },
       {
-        "command": "markdownJet.viewMode.previewOnly.active", "title": "MarkdownJet: Preview Mode (current)",
-        "icon": { "light": "media/preview-active-light.svg", "dark": "media/preview-active-dark.svg" }
+        "command": "markdownJet.viewMode.previewOnly.active",
+        "title": "MarkdownJet: Preview Mode (current)",
+        "icon": {
+          "light": "media/preview-active-light.svg",
+          "dark": "media/preview-active-dark.svg"
+        }
       },
-      { "command": "markdownJet.insertTable",        "title": "MarkdownJet: Insert Table" },
-      { "command": "markdownJet.insertLink",         "title": "MarkdownJet: Insert Link" },
-      { "command": "markdownJet.insertImage",        "title": "MarkdownJet: Insert Image" },
-      { "command": "markdownJet.format",             "title": "MarkdownJet: Format Document" },
-      { "command": "markdownJet.lint.run",           "title": "MarkdownJet: Run Lint" },
-      { "command": "markdownJet.openInTextEditor",   "title": "MarkdownJet: Open in Plain Text Editor" },
-      { "command": "markdownJet.setAsDefault",       "title": "MarkdownJet: Set as Default Markdown Editor" },
-      { "command": "markdownJet.resetDefaultPrompt", "title": "MarkdownJet: Re-enable First-Run Prompt" }
+      {
+        "command": "markdownJet.insertTable",
+        "title": "MarkdownJet: Insert Table"
+      },
+      {
+        "command": "markdownJet.insertLink",
+        "title": "MarkdownJet: Insert Link"
+      },
+      {
+        "command": "markdownJet.insertImage",
+        "title": "MarkdownJet: Insert Image"
+      },
+      {
+        "command": "markdownJet.format",
+        "title": "MarkdownJet: Format Document"
+      },
+      {
+        "command": "markdownJet.lint.run",
+        "title": "MarkdownJet: Run Lint"
+      },
+      {
+        "command": "markdownJet.openInTextEditor",
+        "title": "MarkdownJet: Open in Plain Text Editor"
+      },
+      {
+        "command": "markdownJet.setAsDefault",
+        "title": "MarkdownJet: Set as Default Markdown Editor"
+      },
+      {
+        "command": "markdownJet.resetDefaultPrompt",
+        "title": "MarkdownJet: Re-enable First-Run Prompt"
+      }
     ],
     "menus": {
       "commandPalette": [
-        { "command": "markdownJet.viewMode.editOnly.active",    "when": "false" },
-        { "command": "markdownJet.viewMode.both.active",        "when": "false" },
-        { "command": "markdownJet.viewMode.previewOnly.active", "when": "false" }
+        {
+          "command": "markdownJet.viewMode.editOnly.active",
+          "when": "false"
+        },
+        {
+          "command": "markdownJet.viewMode.both.active",
+          "when": "false"
+        },
+        {
+          "command": "markdownJet.viewMode.previewOnly.active",
+          "when": "false"
+        }
       ],
       "editor/title": [
         {
@@ -115,29 +191,62 @@
         }
       ],
       "editor/context": [
-        { "command": "markdownJet.insertTable", "when": "resourceLangId == markdown", "group": "markdownJet@1" },
-        { "command": "markdownJet.insertLink",  "when": "resourceLangId == markdown", "group": "markdownJet@2" },
-        { "command": "markdownJet.insertImage", "when": "resourceLangId == markdown", "group": "markdownJet@3" }
+        {
+          "command": "markdownJet.insertTable",
+          "when": "resourceLangId == markdown",
+          "group": "markdownJet@1"
+        },
+        {
+          "command": "markdownJet.insertLink",
+          "when": "resourceLangId == markdown",
+          "group": "markdownJet@2"
+        },
+        {
+          "command": "markdownJet.insertImage",
+          "when": "resourceLangId == markdown",
+          "group": "markdownJet@3"
+        }
       ],
       "explorer/context": [
-        { "command": "markdownJet.openInTextEditor",
+        {
+          "command": "markdownJet.openInTextEditor",
           "when": "resourceExtname == .md || resourceExtname == .markdown",
-          "group": "navigation" }
+          "group": "navigation"
+        }
       ]
     },
     "keybindings": [
-      { "command": "markdownJet.insertTable", "key": "ctrl+alt+t", "mac": "cmd+alt+t",
-        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'" },
-      { "command": "markdownJet.insertLink",  "key": "ctrl+alt+l", "mac": "cmd+alt+l",
-        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'" },
-      { "command": "markdownJet.insertImage", "key": "ctrl+alt+i", "mac": "cmd+alt+i",
-        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'" },
-      { "command": "markdownJet.format",      "key": "shift+alt+f","mac": "shift+alt+f",
-        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'" }
+      {
+        "command": "markdownJet.insertTable",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t",
+        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'"
+      },
+      {
+        "command": "markdownJet.insertLink",
+        "key": "ctrl+alt+l",
+        "mac": "cmd+alt+l",
+        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'"
+      },
+      {
+        "command": "markdownJet.insertImage",
+        "key": "ctrl+alt+i",
+        "mac": "cmd+alt+i",
+        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'"
+      },
+      {
+        "command": "markdownJet.format",
+        "key": "shift+alt+f",
+        "mac": "shift+alt+f",
+        "when": "resourceLangId == markdown || activeCustomEditorId == 'markdownJet.editor'"
+      }
     ],
     "views": {
       "explorer": [
-        { "id": "markdownJetOutline", "name": "Markdown Outline" }
+        {
+          "id": "markdownJetOutline",
+          "name": "Markdown Outline"
+        }
       ]
     },
     "configuration": {
@@ -145,20 +254,28 @@
       "properties": {
         "markdownJet.preview.theme": {
           "type": "string",
-          "enum": ["light", "dark", "github", "solarized"],
+          "enum": [
+            "light",
+            "dark",
+            "github",
+            "solarized"
+          ],
           "default": "light",
           "description": "Preview color theme (legacy — VS Code theme is the source of truth)."
         },
         "markdownJet.preview.enableMermaid": {
-          "type": "boolean", "default": true,
+          "type": "boolean",
+          "default": true,
           "description": "Render fenced ```mermaid blocks as diagrams."
         },
         "markdownJet.preview.enableMath": {
-          "type": "boolean", "default": true,
+          "type": "boolean",
+          "default": true,
           "description": "Render $...$ and $$...$$ math with KaTeX."
         },
         "markdownJet.lint.enable": {
-          "type": "boolean", "default": true,
+          "type": "boolean",
+          "default": true,
           "description": "Run live Markdown lint and report to the Problems panel."
         }
       }
@@ -166,6 +283,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
+    "vscode:uninstall": "node ./dist/uninstall.js",
     "compile": "node esbuild.js",
     "watch": "node esbuild.js --watch",
     "package": "node esbuild.js --production",

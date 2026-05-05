@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2026-05-06
+
+### Fixed
+
+- **Settings cleanup on uninstall is now reliable.** The 0.0.3 fix used
+  the `deactivate()` hook, but VS Code routinely tears down the
+  extension host before the async `cfg.update()` flushes — so settings
+  often remained pointing at `markdownJet.editor` after uninstall.
+  This release adds a `vscode:uninstall` lifecycle script that runs as a
+  separate Node process *outside* the extension host. It directly opens
+  the user's `settings.json` (using `jsonc-parser` to preserve comments
+  and formatting) and removes the `*.md` / `*.markdown` entries that
+  point at our viewType. Works across Code, Code Insiders, VSCodium,
+  and Cursor installs.
+- The original `deactivate()` cleanup is kept as a fallback for the
+  rare case where the uninstall script doesn't run.
+
 ## [0.0.3] - 2026-05-05
 
 ### Fixed

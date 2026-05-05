@@ -121,11 +121,26 @@ async function main() {
     plugins: [localResolver]
   });
 
+  // Uninstall script: standalone Node, runs as `vscode:uninstall` *outside*
+  // the extension host. Pure stdlib — no third-party deps. Tiny.
+  const uninstallCtx = await esbuild.context({
+    entryPoints: ['src/uninstall.ts'],
+    bundle: true,
+    format: 'cjs',
+    platform: 'node',
+    target: 'node18',
+    outfile: 'dist/uninstall.js',
+    sourcemap: !production,
+    minify: production,
+    logLevel: 'info',
+    plugins: [localResolver]
+  });
+
   if (watch) {
-    await Promise.all([extCtx.watch(), webviewCtx.watch()]);
+    await Promise.all([extCtx.watch(), webviewCtx.watch(), uninstallCtx.watch()]);
   } else {
-    await Promise.all([extCtx.rebuild(), webviewCtx.rebuild()]);
-    await Promise.all([extCtx.dispose(), webviewCtx.dispose()]);
+    await Promise.all([extCtx.rebuild(), webviewCtx.rebuild(), uninstallCtx.rebuild()]);
+    await Promise.all([extCtx.dispose(), webviewCtx.dispose(), uninstallCtx.dispose()]);
   }
 }
 
