@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-05-06
+
+### Changed
+
+- **Zero-touch defaults.** When the user's `workbench.editorAssociations`
+  has no mapping for `*.md`, MarkdownJet no longer writes to settings or
+  shows a prompt — `customEditors[].priority = "default"` already makes
+  us the default editor automatically. Result: a clean install leaves
+  the user's settings.json *unchanged*, and uninstall has nothing to
+  clean up.
+- The first-run prompt now fires **only on a real conflict** — i.e.,
+  when the user has explicitly mapped `*.md` to some other editor (e.g.
+  `vscode.markdown.preview.editor`). Wording also clarified that we're
+  asking to *override* their existing choice.
+- Removed the per-shutdown editor-association flicker that 0.0.3/0.0.4
+  introduced. `deactivate()` is now a no-op; cleanup is handled solely
+  by the `vscode:uninstall` script, which is triggered by the actual
+  uninstall event and runs outside the extension host.
+
+### Fixed
+
+- Settings.json never accumulates entries that point at a missing
+  viewType after uninstall. The `vscode:uninstall` regex sweep stays in
+  place as primary cleanup, and because we only ever write on user
+  consent (i.e., conflict + override), there's nothing to clean for
+  most users.
+
 ## [0.0.4] - 2026-05-06
 
 ### Fixed
