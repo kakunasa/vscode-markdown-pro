@@ -1,0 +1,9 @@
+node_modules/
+dist/
+out/
+*.vsix
+.DS_Store
+.vscode-test/
+
+# media/vendor is generated at build time from node_modules — don't commit
+media/vendor/

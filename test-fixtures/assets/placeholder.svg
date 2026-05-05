@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120" width="240" height="120">
+  <rect width="240" height="120" rx="8" fill="#4f46e5"/>
+  <text x="120" y="68" font-family="-apple-system, sans-serif" font-size="22" font-weight="600"
+        fill="#ffffff" text-anchor="middle">Local Placeholder</text>
+</svg>

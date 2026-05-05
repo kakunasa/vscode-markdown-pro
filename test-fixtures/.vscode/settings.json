@@ -1,0 +1,6 @@
+{
+  "workbench.editorAssociations": {
+    "*.md": "markdownPro.editor",
+    "*.markdown": "markdownPro.editor"
+  }
+}
