@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-05-05
+
+### Fixed
+
+- **Critical: clean up `workbench.editorAssociations` on deactivate / uninstall.**
+  Previously, uninstalling MarkdownJet left the user's settings pointing
+  `*.md` and `*.markdown` to the now-missing `markdownJet.editor` viewType,
+  which made `.md` files unopenable. The extension now snapshots the prior
+  associations before writing its own, and restores them on `deactivate()`.
+
+### Changed
+
+- All user-facing strings translated to English (commands, prompts,
+  configuration descriptions, lint messages, view name).
+- GitHub repository renamed to `kakunasa/markdownjet`; URLs in
+  `package.json` (`repository`, `homepage`, `bugs`) updated accordingly.
+
 ## [0.0.2] - 2026-05-05
 
 ### Added

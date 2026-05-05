@@ -5,6 +5,9 @@ import { MarkdownLinter } from './lint/linter';
 import { OutlineProvider } from './outline/outlineProvider';
 
 const DISMISSED_KEY = 'markdownJet.dismissedDefaultPrompt';
+/** Saved snapshot of the user's `*.md` / `*.markdown` editor associations
+ *  *before* we wrote our own. Used to restore on uninstall/deactivate. */
+const PREV_ASSOC_KEY = 'markdownJet.previousEditorAssociations';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('[markdownJet] activated, registering custom editor markdownJet.editor');
@@ -21,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     vscode.commands.registerCommand('markdownJet.setAsDefault', async () => {
-      await setMarkdownJetAsDefault();
+      await setMarkdownJetAsDefault(context);
       vscode.window.showInformationMessage(
         '✓ MarkdownJet is now the default editor for *.md and *.markdown. ' +
         'Reopen any markdown file to see the change.'
@@ -53,6 +56,9 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
+  // Stash the activation context for deactivate() — VS Code doesn't pass it.
+  deactivateCtx = context;
+
   // Run after a short delay so the prompt doesn't appear during VS Code startup.
   setTimeout(() => {
     maybePromptForDefaultEditor(context).catch((err) =>
@@ -61,14 +67,50 @@ export function activate(context: vscode.ExtensionContext) {
   }, 1500);
 }
 
-export function deactivate() {}
+let deactivateCtx: vscode.ExtensionContext | undefined;
+
+/**
+ * Called by VS Code on extension deactivation — including **uninstall**.
+ *
+ * If we previously wrote `*.md` / `*.markdown` into the user's
+ * `workbench.editorAssociations`, restore the prior values (or remove our
+ * entries entirely if there was nothing before). This prevents the dreaded
+ * "uninstalled MarkdownJet, now no .md file opens" failure mode.
+ *
+ * VS Code awaits the returned promise. The settings update needs to flush
+ * before the extension host tears us down.
+ */
+export async function deactivate(): Promise<void> {
+  console.log('[markdownJet] deactivating — restoring editor associations');
+  try {
+    const cfg = vscode.workspace.getConfiguration('workbench');
+    const assoc = { ...(cfg.get<Record<string, string>>('editorAssociations') ?? {}) };
+    const prev = deactivateCtx?.globalState.get<Record<string, string | undefined>>(PREV_ASSOC_KEY) ?? {};
+
+    let changed = false;
+    for (const pat of ['*.md', '*.markdown']) {
+      if (assoc[pat] === MarkdownEditorProvider.viewType) {
+        const before = prev[pat];
+        if (before === undefined || before === null || before === '') {
+          delete assoc[pat];
+        } else {
+          assoc[pat] = before;
+        }
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      await cfg.update('editorAssociations', assoc, vscode.ConfigurationTarget.Global);
+    }
+  } catch (e) {
+    console.warn('[markdownJet] failed to restore editor associations during deactivate', e);
+  }
+}
 
 /**
  * If the user already has *.md associated with someone else (or hasn't been
  * asked yet), show a one-time notification offering to take over.
- *
- * The decision is remembered in globalState — we never re-prompt unless the
- * user runs `markdownJet.resetDefaultPrompt`.
  */
 async function maybePromptForDefaultEditor(context: vscode.ExtensionContext): Promise<void> {
   if (context.globalState.get<boolean>(DISMISSED_KEY)) return;
@@ -77,7 +119,6 @@ async function maybePromptForDefaultEditor(context: vscode.ExtensionContext): Pr
   const assoc = cfg.get<Record<string, string>>('editorAssociations') ?? {};
   const current = assoc['*.md'];
 
-  // Already us → no prompt needed.
   if (current === MarkdownEditorProvider.viewType) return;
 
   const conflictNote = current
@@ -94,7 +135,7 @@ async function maybePromptForDefaultEditor(context: vscode.ExtensionContext): Pr
   );
 
   if (choice === setBtn) {
-    await setMarkdownJetAsDefault();
+    await setMarkdownJetAsDefault(context);
     vscode.window.showInformationMessage(
       '✓ MarkdownJet set as default. Reopen any *.md tab to switch.'
     );
@@ -110,16 +151,30 @@ async function maybePromptForDefaultEditor(context: vscode.ExtensionContext): Pr
         'Open a Markdown file first, then re-run "MarkdownJet: Set as Default Markdown Editor" if you want.'
       );
     }
-    // Don't dismiss — they may want to set as default later.
   } else if (choice === neverBtn) {
     await context.globalState.update(DISMISSED_KEY, true);
   }
-  // Closed without choosing → re-prompt next activation.
 }
 
-async function setMarkdownJetAsDefault(): Promise<void> {
+/**
+ * Write our `markdownJet.editor` viewType into `workbench.editorAssociations`
+ * for `*.md` and `*.markdown`. Snapshot the previous values first so we can
+ * restore them on `deactivate()`.
+ */
+async function setMarkdownJetAsDefault(context: vscode.ExtensionContext): Promise<void> {
   const cfg = vscode.workspace.getConfiguration('workbench');
   const existing = cfg.get<Record<string, string>>('editorAssociations') ?? {};
+
+  // Save a snapshot of what was here before we touched it. Only save once —
+  // re-running setAsDefault later shouldn't overwrite the original snapshot.
+  const previousSnapshot = context.globalState.get<Record<string, string | undefined>>(PREV_ASSOC_KEY);
+  if (!previousSnapshot) {
+    await context.globalState.update(PREV_ASSOC_KEY, {
+      '*.md': existing['*.md'],
+      '*.markdown': existing['*.markdown']
+    });
+  }
+
   await cfg.update(
     'editorAssociations',
     {

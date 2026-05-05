@@ -2,7 +2,7 @@
   "name": "markdownjet",
   "displayName": "MarkdownJet",
   "description": "JetBrains-style single-tab Markdown editor for VS Code: CodeMirror 6 + Mermaid + KaTeX + syntax highlighting + bidirectional scroll sync.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "kakunasa",
   "license": "MIT",
   "icon": "media/icon.png",
