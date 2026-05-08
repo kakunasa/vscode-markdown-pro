@@ -1,5 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
   <rect x="1" y="2" width="14" height="12" rx="1.5" stroke="#cccccc" stroke-width="1.0" fill="none"/>
-  <line x1="1" y1="5.5" x2="15" y2="5.5" stroke="#cccccc" stroke-width="1.0"/>
-  <path fill="#cccccc" fill-rule="evenodd" d="M1.55 6.05 L14.45 6.05 L14.45 12.95 A1.0 1.0 0 0 1 13.45 13.95 L2.55 13.95 A1.0 1.0 0 0 1 1.55 12.95 Z M6.5 7.4 L4 9.7 L6.5 12 L6.5 11.2 L4.9 9.7 L6.5 8.2 Z M9.5 7.4 L12 9.7 L9.5 12 L9.5 11.2 L11.1 9.7 L9.5 8.2 Z"/>
+  <line x1="8" y1="2" x2="8" y2="14" stroke="#cccccc" stroke-width="1.0"/>
+  <path d="M3.5 5L2.5 8L3.5 11" stroke="#cccccc" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M5.5 5L6.5 8L5.5 11" stroke="#cccccc" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path fill="#cccccc" d="M8.55 2.55 L13.45 2.55 A1.0 1.0 0 0 1 14.45 3.55 L14.45 12.45 A1.0 1.0 0 0 1 13.45 13.45 L8.55 13.45 Z"/>
 </svg>

@@ -171,7 +171,14 @@ function buildState(initial: string): EditorState {
         },
         {
           key: 'Mod-2',
-          run: () => { setMode('both'); return true; }
+          run: () => {
+            // Cmd/Ctrl+2 toggles between horizontal and vertical both layouts.
+            const cur = body.classList.contains('mode-both') ? 'both'
+              : body.classList.contains('mode-both-vertical') ? 'both-vertical'
+              : '';
+            setMode(cur === 'both' ? 'both-vertical' : 'both');
+            return true;
+          }
         },
         {
           key: 'Mod-3',
@@ -197,8 +204,10 @@ const view = new EditorView({
 });
 
 // ---------- Mode switching ----------
-function setMode(mode: 'edit' | 'both' | 'preview', silent = false) {
-  body.classList.remove('mode-edit', 'mode-both', 'mode-preview');
+type ViewMode = 'edit' | 'both' | 'both-vertical' | 'preview';
+
+function setMode(mode: ViewMode, silent = false) {
+  body.classList.remove('mode-edit', 'mode-both', 'mode-both-vertical', 'mode-preview');
   body.classList.add('mode-' + mode);
   // Reflow CodeMirror so it picks up the new container size after CSS change.
   requestAnimationFrame(() => view.requestMeasure());
@@ -338,7 +347,7 @@ function previewTopLine(): number {
 let scrollFromEditorRaf = 0;
 view.scrollDOM.addEventListener('scroll', () => {
   if (suppressScrollSync) return;
-  if (!body.classList.contains('mode-both')) return;
+  if (!body.classList.contains('mode-both') && !body.classList.contains('mode-both-vertical')) return;
   if (scrollFromEditorRaf) cancelAnimationFrame(scrollFromEditorRaf);
   scrollFromEditorRaf = requestAnimationFrame(() => {
     scrollFromEditorRaf = 0;
@@ -349,7 +358,7 @@ view.scrollDOM.addEventListener('scroll', () => {
 let scrollFromPreviewRaf = 0;
 previewPane.addEventListener('scroll', () => {
   if (suppressScrollSync) return;
-  if (!body.classList.contains('mode-both')) return;
+  if (!body.classList.contains('mode-both') && !body.classList.contains('mode-both-vertical')) return;
   if (scrollFromPreviewRaf) cancelAnimationFrame(scrollFromPreviewRaf);
   scrollFromPreviewRaf = requestAnimationFrame(() => {
     scrollFromPreviewRaf = 0;

@@ -2,7 +2,7 @@
   "name": "markdownjet",
   "displayName": "MarkdownJet",
   "description": "JetBrains-style single-tab Markdown editor for VS Code: CodeMirror 6 + Mermaid + KaTeX + syntax highlighting + bidirectional scroll sync.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "kakunasa",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -88,10 +88,18 @@
       },
       {
         "command": "markdownJet.viewMode.both.active",
-        "title": "MarkdownJet: Edit + Preview (current)",
+        "title": "MarkdownJet: Edit + Preview — horizontal (current)",
         "icon": {
           "light": "media/both-active-light.svg",
           "dark": "media/both-active-dark.svg"
+        }
+      },
+      {
+        "command": "markdownJet.viewMode.both.activeVertical",
+        "title": "MarkdownJet: Edit + Preview — vertical (current)",
+        "icon": {
+          "light": "media/both-active-v-light.svg",
+          "dark": "media/both-active-v-dark.svg"
         }
       },
       {
@@ -154,6 +162,10 @@
           "when": "false"
         },
         {
+          "command": "markdownJet.viewMode.both.activeVertical",
+          "when": "false"
+        },
+        {
           "command": "markdownJet.viewMode.previewOnly.active",
           "when": "false"
         }
@@ -175,8 +187,13 @@
           "group": "navigation@2"
         },
         {
+          "command": "markdownJet.viewMode.both.activeVertical",
+          "when": "activeCustomEditorId == 'markdownJet.editor' && markdownJet.activeMode == 'both-vertical'",
+          "group": "navigation@2"
+        },
+        {
           "command": "markdownJet.viewMode.both",
-          "when": "activeCustomEditorId == 'markdownJet.editor' && markdownJet.activeMode != 'both'",
+          "when": "activeCustomEditorId == 'markdownJet.editor' && markdownJet.activeMode != 'both' && markdownJet.activeMode != 'both-vertical'",
           "group": "navigation@2"
         },
         {

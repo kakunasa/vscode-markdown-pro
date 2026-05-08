@@ -10,7 +10,9 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 
   public static activeDoc: vscode.TextDocument | undefined;
   public static activeWebview: vscode.WebviewPanel | undefined;
-  public static currentMode: 'edit' | 'both' | 'preview' = 'edit';
+  // 'both'          → horizontal split (editor left, preview right)
+  // 'both-vertical' → vertical split (editor top, preview bottom)
+  public static currentMode: 'edit' | 'both' | 'both-vertical' | 'preview' = 'edit';
   private static panels = new Set<vscode.WebviewPanel>();
   /** Lookup "the panel showing this URI" — used by outline reveal so we can
    *  postMessage the right webview when a heading is clicked. */
@@ -29,19 +31,31 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
       }
     );
 
-    const setMode = (mode: 'edit' | 'both' | 'preview') => {
+    const setMode = (mode: 'edit' | 'both' | 'both-vertical' | 'preview') => {
       const panel = MarkdownEditorProvider.activeWebview;
       if (!panel) return;
       panel.webview.postMessage({ type: 'setMode', mode });
     };
 
+    /** Click on Both:
+     *   - if not in any both mode → enter 'both' (horizontal, default)
+     *   - if in 'both'            → switch to 'both-vertical'
+     *   - if in 'both-vertical'   → switch back to 'both' */
+    const toggleBoth = () => {
+      const cur = MarkdownEditorProvider.currentMode;
+      if (cur === 'both') setMode('both-vertical');
+      else if (cur === 'both-vertical') setMode('both');
+      else setMode('both');
+    };
+
     const cmds = vscode.Disposable.from(
-      vscode.commands.registerCommand('markdownJet.viewMode.editOnly',           () => setMode('edit')),
-      vscode.commands.registerCommand('markdownJet.viewMode.editOnly.active',    () => setMode('edit')),
-      vscode.commands.registerCommand('markdownJet.viewMode.both',               () => setMode('both')),
-      vscode.commands.registerCommand('markdownJet.viewMode.both.active',        () => setMode('both')),
-      vscode.commands.registerCommand('markdownJet.viewMode.previewOnly',        () => setMode('preview')),
-      vscode.commands.registerCommand('markdownJet.viewMode.previewOnly.active', () => setMode('preview')),
+      vscode.commands.registerCommand('markdownJet.viewMode.editOnly',            () => setMode('edit')),
+      vscode.commands.registerCommand('markdownJet.viewMode.editOnly.active',     () => setMode('edit')),
+      vscode.commands.registerCommand('markdownJet.viewMode.both',                toggleBoth),
+      vscode.commands.registerCommand('markdownJet.viewMode.both.active',         toggleBoth),
+      vscode.commands.registerCommand('markdownJet.viewMode.both.activeVertical', toggleBoth),
+      vscode.commands.registerCommand('markdownJet.viewMode.previewOnly',         () => setMode('preview')),
+      vscode.commands.registerCommand('markdownJet.viewMode.previewOnly.active',  () => setMode('preview')),
 
       // Outline → reveal: jump to a specific line in the file's custom editor.
       vscode.commands.registerCommand(
@@ -278,10 +292,20 @@ function baseStyles(): string {
 
     body.mode-edit    .editor-pane  { display: flex; flex: 1 1 100%; }
     body.mode-preview .preview-pane { display: block; flex: 1 1 100%; }
-    body.mode-both    .editor-pane  { display: flex; flex: 1 1 50%; }
-    body.mode-both    .preview-pane {
+
+    /* Horizontal split: editor LEFT, preview RIGHT (container is row by default). */
+    body.mode-both .editor-pane  { display: flex; flex: 1 1 50%; }
+    body.mode-both .preview-pane {
       display: block; flex: 1 1 50%;
       border-left: 1px solid var(--vscode-panel-border, var(--vscode-widget-border, #444));
+    }
+
+    /* Vertical split: editor TOP, preview BOTTOM. Switch container to column. */
+    body.mode-both-vertical .container     { flex-direction: column; }
+    body.mode-both-vertical .editor-pane   { display: flex;  flex: 1 1 50%; }
+    body.mode-both-vertical .preview-pane  {
+      display: block; flex: 1 1 50%;
+      border-top: 1px solid var(--vscode-panel-border, var(--vscode-widget-border, #444));
     }
 
     .editor-pane { flex-direction: column; }

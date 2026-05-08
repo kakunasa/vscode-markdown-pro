@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2026-05-08
+
+### Added
+
+- **Vertical split sub-mode for Both.** The Both button now toggles
+  between two layouts:
+  - First click (when not in Both): horizontal split — editor left,
+    preview right (default).
+  - Second click (already in Both): switches to vertical split —
+    editor on top, preview on bottom.
+  - Third click: back to horizontal.
+- New mode value `both-vertical` published to the
+  `markdownJet.activeMode` context key, so the editor/title bar shows a
+  third button variant (light/dark each) with the icon flipped to
+  represent the top/bottom layout.
+- `Cmd/Ctrl+2` now toggles between horizontal and vertical Both
+  layouts when already in Both (entering Both for the first time still
+  starts horizontal).
+
+### Changed
+
+- Webview body class set updated to include `mode-both-vertical`. CSS
+  switches the `.container`'s `flex-direction` to `column`, giving the
+  preview a top border instead of a left border. Scroll-sync continues
+  to work in both orientations.
+
 ## [0.0.5] - 2026-05-06
 
 ### Changed
